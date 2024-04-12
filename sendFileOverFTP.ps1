@@ -33,9 +33,28 @@ function global:UploadFileViaFTP {
         $ftpRequestStream = $ftpWebRequest.GetRequestStream()
         $ftpRequestStream.Write($fileContent, 0, $fileContent.Length)
         $ftpRequestStream.Close()
-        
+        [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")
+$objNotifyIcon = New-Object System.Windows.Forms.NotifyIcon 
+
+$objNotifyIcon.Icon = [System.Drawing.SystemIcons]::Information
+$objNotifyIcon.BalloonTipIcon = "Info" 
+$objNotifyIcon.BalloonTipText = "Sent file successfully" 
+$objNotifyIcon.BalloonTipTitle = "SendFTP"
+$objNotifyIcon.Visible = $True 
+
+$objNotifyIcon.ShowBalloonTip(1000)
         Remove-Item -Path $filepath #Automatically deletes the file from your Windows machine to prevent double copies
     } catch {
+    [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")
+$objNotifyIcon = New-Object System.Windows.Forms.NotifyIcon 
+
+$objNotifyIcon.Icon = [System.Drawing.SystemIcons]::Information
+$objNotifyIcon.BalloonTipIcon = "Info" 
+$objNotifyIcon.BalloonTipText = "Send failed." 
+$objNotifyIcon.BalloonTipTitle = "SendFTP"
+$objNotifyIcon.Visible = $True 
+
+$objNotifyIcon.ShowBalloonTip(1000)
         Remove-Item -Path $filepath
     }
 }
